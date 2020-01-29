@@ -3,6 +3,9 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 import time
 from django.utils.text import slugify
+from PIL import Image as PILImage
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 # Create your models here.
 class Product(models.Model):
     name = models.CharField(max_length = 50)
@@ -15,7 +18,7 @@ class Product(models.Model):
     def get_image_path(instance, filename):
         current_time = time.strftime("%Y/%m/%d")
         return f"products/{current_time}/{filename}"
-    image = models.ImageField(upload_to = get_image_path, null=True, blank=True)
+    image = models.ImageField(upload_to=get_image_path, null=True, blank=True)
     slug = models.SlugField(max_length = 50, blank = True, null = True)
     
 

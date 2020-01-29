@@ -13,18 +13,24 @@ class SignUpForm(forms.Form):
 
     def clean_username(self):
         username = super().clean()['username']
+        if " " in username:
+            raise forms.ValidationError("不能有空白")
         if User.objects.filter(username=username).count():
             raise  forms.ValidationError("使用者重複")
         return username
     
     def clean_password(self):
         password = super().clean()['password']
+        if " " in password:
+            raise forms.ValidationError('不能有空白')
         if User.objects.filter(password=password):
             raise forms.ValidationError("密碼重複")
         return password
 
     def clean_email(self):
         email = super().clean()['email']
+        if " " in email:
+            raise ValidationError('不能有空白')
         if User.objects.filter(email=email):
             raise forms.ValidationError("信箱重複")
         return email
