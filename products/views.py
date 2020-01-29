@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from .models import Product
 from .forms import ProductForm
+from django.views.decorators.http import require_http_methods
+
 def product_list(request):
     products = Product.objects.all()
     print('this is me')
@@ -21,3 +24,30 @@ def product_create(request):
         form = ProductForm()
     return render(request, 'products/create.html', {'form' : form})
 
+@require_http_methods(['POST'])
+def product_delete(request):
+    product_id = int(request.POST['product_id'])
+    product = get_object_or_404(Product, pk=product_id)
+    product.delete()
+    return redirect(reverse('product_delete_success'))
+
+
+def product_delete_success(request):
+    return render(request, 'products/product_delete_success.html')
+    
+    #if request.method == 'POST':
+        #getting product id from form
+        #id = form....
+        #query Product with given id 
+        # delete object from database
+        #if operation sucess, redirect user to home
+
+def product_update(request):
+    pass
+    #if request method is get
+    #getting product id from form
+    #query Product instance with given id
+    #create product form
+    #bind Product instance with form
+    #return form
+    #else if method is post

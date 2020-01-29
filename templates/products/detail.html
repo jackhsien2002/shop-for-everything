@@ -5,4 +5,9 @@
 <p>Description: {{ product.description }}</p>
 <p>Price: {{ product.price }}</p>
 <img src="{{ product.image.url }}">
+<form action="{% url 'product_delete' %}" method="post" name="product_delete">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{ product.id }}">
+    <button type="submit">刪除</button>
+</form>
 {% endblock %}
