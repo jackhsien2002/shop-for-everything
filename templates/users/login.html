@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>登入</h3>
+
+{% if form.errors %}
+    <p>使用者帳號密碼沒有一致，請重新輸入</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+        <p>你的帳號沒有權限進入這個頁面，請輸入有權限的帳號密碼</p>
+    {% else %}
+        <p>請輸入帳號密碼</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>使用者名稱</td>
+            <td>{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td>使用者密碼</td>
+            <td>{{ form.password }}</td>
+        </tr>
+    </table>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit">確認</button>
+</form>
+
+<p><a href="{% url 'password_reset' %}">遺失密碼?</a></p>
+{% endblock %}

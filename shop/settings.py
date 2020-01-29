@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'products',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -141,3 +142,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staic'),
     os.path.join(BASE_DIR, 'media'),
 ]
+
+#authentication setup
+LOGIN_REDIRECT_URL ='/product/list'
+
+#setup email backend
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False

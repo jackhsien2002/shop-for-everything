@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>你已經成功登出!</h1>
+<p><a href="{% url 'login' %}">再登入</p>
+<p><a href="{% url 'product_list' %}">回到主頁面</p>
+{% endblock %}
