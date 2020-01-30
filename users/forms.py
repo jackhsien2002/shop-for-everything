@@ -33,7 +33,7 @@ class SignUpForm(forms.Form):
             username=cd['username'],
             email=cd['email'],
         )
-        user.set_password(self.password)
+        user.set_password(cd['password'])
         if commit == True:
             user.save()
         return user
