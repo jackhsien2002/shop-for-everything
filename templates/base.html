@@ -8,6 +8,7 @@
 <body>
 {% if request.user.is_authenticated %}
     使用者{{ request.user }}
+    <a href="{% url 'product_create' %}">新增商品</a>
 {% else %}
     <a href="{% url 'login' %}">請登入</a>
 {% endif %}

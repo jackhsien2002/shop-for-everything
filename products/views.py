@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect
 from django.urls import reverse
 from .models import Product
 from .forms import ProductForm
@@ -6,8 +6,6 @@ from django.views.decorators.http import require_http_methods
 
 def product_list(request):
     products = Product.objects.all()
-    print('this is me')
-    print(products)
     return render(request, 'products/list.html', {'products' : products})
 
 def product_detail(request, slug):
@@ -16,12 +14,12 @@ def product_detail(request, slug):
 
 def product_create(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST)
+        form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
             product = form.save()
-            return render(request, 'products/detail.html', {'product' : product})
+            return HttpResponseRedirect(product.get_absolute_url())
     else:
-        form = ProductForm()
+        form = ProductForm(initial={'author':request.user})
     return render(request, 'products/create.html', {'form' : form})
 
 @require_http_methods(['POST'])

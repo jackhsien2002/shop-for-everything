@@ -3,9 +3,9 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 import time
 from django.utils.text import slugify
-from PIL import Image as PILImage
-from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
+import Image
+from django.urls import reverse
+from unidecode import unidecode
 # Create your models here.
 class Product(models.Model):
     name = models.CharField(max_length = 50)
@@ -18,14 +18,24 @@ class Product(models.Model):
     def get_image_path(instance, filename):
         current_time = time.strftime("%Y/%m/%d")
         return f"products/{current_time}/{filename}"
-    image = models.ImageField(upload_to=get_image_path, null=True, blank=True)
-    slug = models.SlugField(max_length = 50, blank = True, null = True)
-    
+    image = models.ImageField(upload_to=get_image_path, null=True, blank=True, default='/default.jpg')
+    slug = models.SlugField(max_length = 50, blank = True, null = True, unique=True, allow_unicode=True)
+
 
     def save(self, *args, **kwargs):
         if self.slug == None:
-            self.slug = slugify(self.name)
+            self.slug = slugify(unidecode(self.name))
+        #將圖片大小調整為200x200像素
+        try:
+            initial_path = self.image.path
+            img = Image.open(self.image.open())
+            width, height = 200, 200
+            img_resize = img.resize((width, height))
+            img_resize.save(initial_path)
+        except:
+            pass
+
         super(Product, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('detail', args = [self.slug])
+        return reverse('product_detail', args = [self.slug])
