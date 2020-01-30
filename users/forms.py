@@ -19,22 +19,6 @@ class SignUpForm(forms.Form):
             raise  forms.ValidationError("使用者重複")
         return username
     
-    def clean_password(self):
-        password = super().clean()['password']
-        if " " in password:
-            raise forms.ValidationError('不能有空白')
-        if User.objects.filter(password=password):
-            raise forms.ValidationError("密碼重複")
-        return password
-
-    def clean_email(self):
-        email = super().clean()['email']
-        if " " in email:
-            raise ValidationError('不能有空白')
-        if User.objects.filter(email=email):
-            raise forms.ValidationError("信箱重複")
-        return email
-    
     def clean(self):
         cd = super().clean()
         password = cd['password']
@@ -47,9 +31,9 @@ class SignUpForm(forms.Form):
         cd = super().clean()
         user = User(
             username=cd['username'],
-            password=cd['password'],
             email=cd['email'],
         )
+        user.set_password(self.password)
         if commit == True:
             user.save()
         return user
