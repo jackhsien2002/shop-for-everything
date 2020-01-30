@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 import time
 from django.utils.text import slugify
-import Image
+from PIL import Image
 from django.urls import reverse
 from unidecode import unidecode
 # Create your models here.
