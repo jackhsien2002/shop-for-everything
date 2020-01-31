@@ -3,10 +3,24 @@ from django.urls import reverse
 from .models import Product
 from .forms import ProductForm
 from django.views.decorators.http import require_http_methods
+from django.core.paginator import Paginator
 
 def product_list(request):
     products = Product.objects.all()
-    return render(request, 'products/list.html', {'products' : products})
+    #每頁顯示3個產品
+    paginator = Paginator(products, 3)
+    page_number = request.GET.get('page', 1)
+    product_list = paginator.get_page(page_number)
+    page_array = list(range(1,paginator.num_pages + 1))
+    return render(
+        request, 
+        'products/list.html', 
+        {
+            'product_list' : product_list,
+            'page_array': page_array,
+            'paginator': paginator,
+        }
+    )
 
 def product_detail(request, slug):
     product = Product.objects.get(slug = slug)

@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="card-deck">
-    {% for product in products %}
+    {% for product in product_list %}
         <div class="col-sm-3">
             <div class="card" style="width: 16rem;">
                 <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
@@ -12,6 +12,7 @@
                     <li>名稱： {{ product.name }}</li>
                     <li>價錢： {{ product.price }}</li>
                     <li>庫存： {{ product.stock }}</li>
+                    <li>店加:  {{ product.author.username }}</li>
                 </ul>
                 <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary">查看</a>
                 </div>
@@ -19,4 +20,23 @@
         </div>
     {% endfor %}
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="?page={{ paginator.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">前一頁</span>
+                </a>
+            </li>
+            {% for page in page_array %}
+                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+            {% endfor %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ paginator.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">下一頁</span>
+                </a>
+            </li>
+        </ul>
+      </nav>
 {% endblock %}
