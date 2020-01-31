@@ -1,23 +1,24 @@
-from django.conf.settings import CART_SESSION_ID
+from shop.settings import CART_SESSION_ID
 from products.models import Product
-class Cart(models.Model):
+class Cart(object):
 
     def __init__(self, request):
         self.session = request.session
         cart = request.session.get(CART_SESSION_ID)
         if not cart:
             request.session[CART_SESSION_ID]={}
-        self.cart=cart
+        self.cart=request.session[CART_SESSION_ID]
     
     def add(self, product, quantity, update_quantity=False):
         product_id = str(product.id)
         if product_id not in self.cart:
-            self.cart[prodct_id]={'quantity':0, 'price':product.price}
-
+            self.cart[product_id]={'quantity':0, 'price':product.price}
+        
+        item = self.cart[product_id]
         if update_quantity == True:
-            self.cart[product_id] += quantity
+            item['quantity'] += quantity
         else:
-            self.cart[product] = quantity
+            item['quantity'] = quantity
         self.save()
 
     def remove(self, product):
@@ -29,6 +30,11 @@ class Cart(models.Model):
     def get_total_price(self):
         return sum(item['quantity']*item['price'] for item in self.cart.values())
     
+    def is_product_exist(self, product_id):
+        if str(product_id) in self.cart.keys():
+            return True
+        return False
+
     def __iter__(self):
         '''
         產生iterable 內含product instance, total price
@@ -48,6 +54,6 @@ class Cart(models.Model):
         del self.session[CART_SESSION_ID]
         self.session.modified = True
 
-    def save():
+    def save(self):
         self.session[CART_SESSION_ID] = self.cart
         self.session.modified = True

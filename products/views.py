@@ -4,7 +4,6 @@ from .models import Product
 from .forms import ProductForm
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator
-
 def product_list(request):
     products = Product.objects.all()
     #每頁顯示3個產品
@@ -62,20 +61,4 @@ def product_delete(request):
 
 def product_delete_success(request):
     return render(request, 'products/product_delete_success.html')
-    
-    #if request.method == 'POST':
-        #getting product id from form
-        #id = form....
-        #query Product with given id 
-        # delete object from database
-        #if operation sucess, redirect user to home
 
-def product_update(request):
-    pass
-    #if request method is get
-    #getting product id from form
-    #query Product instance with given id
-    #create product form
-    #bind Product instance with form
-    #return form
-    #else if method is post

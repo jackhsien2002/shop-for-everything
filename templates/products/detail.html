@@ -7,12 +7,22 @@
       <div class="card-body">
         <h5 class="card-title">商品名稱: {{ product.name }}</h5>
         <h5 class="card-title">商品價格: {{ product.price }}</h5>
+        <h5 class="card-title">商品庫存: {{ product.stock }}</h5>
+
         <p class="card-text">商品描述: {{ product.description }}</p>
 
-        <form action="{% url 'product_delete' %}" method="post" name="product_delete">
+        <form action="{% url 'product_delete' %}" method="post" name="product-delete">
             {% csrf_token %}
             <input type="hidden" name="product_id" value="{{ product.id }}">
             <button type="submit" class="btn btn-primary">刪除</button>
+        </form>
+
+        <form name="add-to-cart" action="{% url 'update_cart' %}" method="POST">
+          {% csrf_token %}
+          <label for="quantity">數量</label>
+          <input name="quantity" type="number" min="1" max="{{ product.stock }}">
+          <input name="product_id" type="hidden" value="{{ product.id }}">
+          <button type="submit">加到購物車</button>          
         </form>
 
         <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
