@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>Title: {{ product.name }}</p>
-<p>Description: {{ product.description }}</p>
-<p>Price: {{ product.price }}</p>
+<p>商品名稱: {{ product.name }}</p>
+<p>商品描述: {{ product.description }}</p>
+<p>價格: {{ product.price }}</p>
 <img src="{{ product.image.url }}">
 <form action="{% url 'product_delete' %}" method="post" name="product_delete">
     {% csrf_token %}
