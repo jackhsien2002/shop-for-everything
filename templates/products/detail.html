@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>商品名稱: {{ product.name }}</p>
-<p>商品描述: {{ product.description }}</p>
-<p>價格: {{ product.price }}</p>
-<img src="{{ product.image.url }}">
-<form action="{% url 'product_delete' %}" method="post" name="product_delete">
-    {% csrf_token %}
-    <input type="hidden" name="product_id" value="{{ product.id }}">
-    <button type="submit">刪除</button>
-</form>
+<div class="card-group col-sm-6">
+    <div class="card">
+      <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap" >
+      <div class="card-body">
+        <h5 class="card-title">商品名稱: {{ product.name }}</h5>
+        <h5 class="card-title">商品價格: {{ product.price }}</h5>
+        <p class="card-text">商品描述: {{ product.description }}</p>
+
+        <form action="{% url 'product_delete' %}" method="post" name="product_delete">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit" class="btn btn-primary">刪除</button>
+        </form>
+
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+  </div>
 {% endblock %}

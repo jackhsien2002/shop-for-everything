@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="card-deck">
-    {% for product in product_list %}
+    {% for product in current_page.object_list %}
         <div class="col-sm-3">
             <div class="card" style="width: 16rem;">
                 <img class="card-img-top" src="{{ product.image.url }}" alt="Card image cap">
@@ -23,7 +23,7 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item">
-                <a class="page-link" href="?page={{ paginator.previous_page_number }}" aria-label="Previous">
+                <a class="page-link" href="?page={{ previous_page_number }}" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
                 <span class="sr-only">前一頁</span>
                 </a>
@@ -32,7 +32,7 @@
                 <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
             {% endfor %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ paginator.next_page_number }}" aria-label="Next">
+                <a class="page-link" href="?page={{ next_page_number }}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
                 <span class="sr-only">下一頁</span>
                 </a>

@@ -3,17 +3,6 @@
 {% block content %}
 <form action="{% url 'product_create' %}" method="post" enctype='multipart/form-data'>
     {% csrf_token %}
-    {% for field in form %}
-        {{ field.label_tag }}
-        {{ field }}
-        {% for error in field.errors %}
-            {{ error }}
-        {% endfor %}
-    {% endfor %}
-    <button type="submit">確認</button>
-</form>
-<form action="{% url 'product_create' %}" method="post" enctype='multipart/form-data'>
-    {% csrf_token %}
 
     <div class="form-group row">
         <label for="name" class="col-sm-2 col-form-label">商品名稱</label>

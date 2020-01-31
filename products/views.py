@@ -9,16 +9,32 @@ def product_list(request):
     products = Product.objects.all()
     #每頁顯示3個產品
     paginator = Paginator(products, 3)
-    page_number = request.GET.get('page', 1)
+    
+    page_number = request.GET.get('page')
+
+    page_number = 1 if page_number == None else int(page_number)
+
+    current_page = paginator.page(page_number)
     product_list = paginator.get_page(page_number)
     page_array = list(range(1,paginator.num_pages + 1))
+
+    try:
+        previous_page_number = current_page.previous_page_number()
+    except:
+        previous_page_number = current_page.number
+    try:
+        next_page_number = current_page.next_page_number()
+    except:
+        next_page_number = current_page.number
+
     return render(
         request, 
         'products/list.html', 
         {
-            'product_list' : product_list,
+            'current_page' : current_page,
             'page_array': page_array,
-            'paginator': paginator,
+            'previous_page_number': previous_page_number,
+            'next_page_number': next_page_number
         }
     )
 
