@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from .cart import Cart
 from products.models import Product
-
+from .decorators import stock_should_enough
+from django.core.exceptions import PermissionDenied
+@stock_should_enough
 def cart_update(request):
     if request.method == "POST":
         product_id = int(request.POST['product_id'])
@@ -12,7 +14,8 @@ def cart_update(request):
         cart.add(product, quantity, update_quantity)
         print(f"price {cart.get_total_price()}")
         print(f"quantity {len(cart)}")
-    return redirect(product.get_absolute_url())
+        return redirect(product.get_absolute_url())
+    raise PermissionDenied
 
 def cart_detail(request):
     cart = Cart(request)

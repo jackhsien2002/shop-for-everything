@@ -20,7 +20,7 @@
         <form name="add-to-cart" action="{% url 'update_cart' %}" method="POST">
           {% csrf_token %}
           <label for="quantity">數量</label>
-          <input name="quantity" type="number" min="1" max="{{ product.stock }}">
+          <input name="quantity" type="number" min="1">
           <input name="product_id" type="hidden" value="{{ product.id }}">
           <button type="submit">加到購物車</button>          
         </form>
