@@ -25,17 +25,18 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if self.slug == None:
             self.slug = slugify(unidecode(self.name))
+        super(Product, self).save(*args, **kwargs)
         #將圖片大小調整為200x200像素
         try:
             initial_path = self.image.path
             img = Image.open(self.image.open())
-            width, height = 200, 200
-            img_resize = img.resize((width, height))
-            img_resize.save(initial_path)
+            size = 300, 300
+            img_resize = img.thumbnail(size)
+            img_resize.save(initial_path, quality=95)
         except:
             pass
 
-        super(Product, self).save(*args, **kwargs)
+        
 
     def get_absolute_url(self):
         return reverse('product_detail', args = [self.slug])
