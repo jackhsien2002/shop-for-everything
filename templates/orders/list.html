@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for order in orders %}
+    <p><a href="{{ order.get_absolute_url }}">{{ order.id }}</a>{{ order.pub_date }}</p>
+{% endfor %}
+{% endblock %}

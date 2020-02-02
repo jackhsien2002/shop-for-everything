@@ -1,5 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .cart import Cart
+from products.models import Product
+
 def cart_update(request):
     if request.method == "POST":
         product_id = int(request.POST['product_id'])

@@ -28,4 +28,8 @@
             </tr>
         </tbody>
     </table>
+    <form action="{% url 'checkout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">送出結單</button>
+    </form>
 {% endblock %}
