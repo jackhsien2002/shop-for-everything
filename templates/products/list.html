@@ -12,7 +12,7 @@
                     <li>名稱： {{ product.name }}</li>
                     <li>價錢： {{ product.price }}</li>
                     <li>庫存： {{ product.stock }}</li>
-                    <li>店加:  {{ product.author.username }}</li>
+                    <li>店家:  {{ product.author.username }}</li>
                 </ul>
                 <a href="{% url 'product_detail' product.slug %}" class="btn btn-primary">查看</a>
                 </div>
