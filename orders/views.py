@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from cart.cart import Cart
 from .models import Order, OrderProduct
+from .tasks import say_hello, add
+from django.http import HttpResponse
 # Create your views here.
 def checkout(request):
     if request.method == 'POST':
@@ -34,6 +36,10 @@ def order_detail(request, order_id):
     for product in products:
         print(product.product.name)
     return render(request, 'orders/detail.html', {"products": products})
+
+def say_hi(request):
+    add.delay(3,3)
+    return HttpResponse('小工人已經打招呼')
 
 
 

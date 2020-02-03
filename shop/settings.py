@@ -147,3 +147,18 @@ SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 #cart configuration
 CART_SESSION_ID = 'cart'
+
+#configure celery parameters
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'#redis://:password@hostname:port/db_number
+
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+#安全性考量，確保第三方無法控制broker memory的狀態
+CELERY_ACCPET_CONTENT = ['json']
+
+CELERY_RESULT_ACCEPT_CONTENT = ['json']
+
+CELERY_TIMEZONE= ['Asia/Taipei']
+
+#CELERY_TASK_SERIALIZER = ['json']

@@ -3,6 +3,7 @@ from .cart import Cart
 from products.models import Product
 from .decorators import stock_should_enough
 from django.core.exceptions import PermissionDenied
+
 @stock_should_enough
 def cart_update(request):
     if request.method == "POST":

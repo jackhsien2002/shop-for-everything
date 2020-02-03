@@ -1,5 +1,6 @@
 from django.core.exceptions import PermissionDenied
 from products.models import Product
+
 def stock_should_enough(view_function):
     def wrapper(request, *args, **kwargs):
         if request.method == 'POST':
