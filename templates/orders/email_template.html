@@ -1,0 +1,25 @@
+<h3>您已經成功下單，你的訂購清單如下</h3>
+<p>日期: {{ order.get_pub_date }}</p>
+<table>
+    <tr>
+        <td>商品名稱</td>
+        <td>商品數量</td>
+        <td>商品單價</td>
+        <td>商品價格</td>
+    </tr>
+    {% for item in order.products.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.product.price }}</td>
+            <td>{{ item.expense }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td>總金額</td>
+        <td>{{ order.get_total_expense }}</td>
+    </tr>
+</table>
+
