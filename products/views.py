@@ -79,6 +79,10 @@ def product_search(request):
     if request.method != "GET":
         raise Http404('你沒有權限')
     data=request.GET.get('query', None)
+    if data == None:
+        data = request.session['query']
+    else:
+        request.session['query'] = data
     query_list = re.split("[,\- @!~#$%^&*()><?/|]", data)
     query_result = []
     for query_string in query_list:
@@ -113,4 +117,3 @@ def product_search(request):
             'next_page_number': next_page_number
         }
     )
-
