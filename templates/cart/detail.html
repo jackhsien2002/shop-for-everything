@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if not cart %}
+    <h3>你的購物車目前是空的</h3>
+{% else %}
 
     <table class="table">
         <thead class="thead-dark">
@@ -11,25 +14,27 @@
             <th scope="col">金額</th>
           </tr>
         </thead>
-        <tbody>
-            {% for item in cart %}
+            <tbody>
+                {% for item in cart %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.total_price }}</td>
+                    </tr>
+                {% endfor %}
                 <tr>
-                    <td>{{ item.product.name }}</td>
-                    <td>{{ item.product.price }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ item.total_price }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>總金額： {{ cart.get_total_price }}</td>
                 </tr>
-            {% endfor %}
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>總金額： {{ cart.get_total_price }}</td>
-            </tr>
-        </tbody>
+            </tbody>
+
     </table>
     <form action="{% url 'checkout' %}" method="post">
         {% csrf_token %}
         <button type="submit">送出結單</button>
     </form>
+{% endif %}
 {% endblock %}

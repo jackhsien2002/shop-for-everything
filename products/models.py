@@ -6,7 +6,14 @@ from django.utils.text import slugify
 from PIL import Image
 from django.urls import reverse
 from unidecode import unidecode
-# Create your models here.
+
+from pygments.lexers import get_all_lexers
+from pygments.styles import get_all_styles
+
+LEXERS = [item for item in get_all_lexers() if item[1]]
+LANGUAGE_CHOICES = sorted([(item[1][0], item[0]) for item in LEXERS])
+STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
+
 class Product(models.Model):
     name = models.CharField(max_length = 50)
     price = models.IntegerField(validators = [MinValueValidator(0)])
@@ -21,11 +28,12 @@ class Product(models.Model):
     image = models.ImageField(upload_to=get_image_path, null=True, blank=True, default='/default.jpg')
     slug = models.SlugField(max_length = 50, blank = True, unique=True, allow_unicode=True)
 
+    def update_stock(self, qty):
+        self.stock = qty
 
     def save(self, *args, **kwargs):
-        if self.slug == None:
-            self.slug = slugify(unidecode(self.name))
-        super(Product, self).save(*args, **kwargs)
+        self.slug = slugify(unidecode(self.name))
+        super().save(*args, **kwargs)
         #將圖片大小調整為200x200像素
         try:
             initial_path = self.image.path
@@ -33,6 +41,7 @@ class Product(models.Model):
             size = 300, 300
             img_resize = img.thumbnail(size)
             img_resize.save(initial_path, quality=95)
+            print('finish image')
         except:
             pass  
 

@@ -25,7 +25,7 @@ SECRET_KEY = 't)%0b&=8v4g9kdjk(kmfj6vt9u2dc_8=0!9-x(yaz$t+h8n-ia'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django-env.nkajfxe4ub.us-west-2.elasticbeanstalk.com','localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = ['MyShop.us-west-2.elasticbeanstalk.com','localhost', '127.0.0.1', '[::1]']
 
 
 # Application definition
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'users',
     'cart',
     'orders',
+    'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -86,6 +88,9 @@ if 'RDS_HOSTNAME' in os.environ:
             'PASSWORD': os.environ['RDS_PASSWORD'],
             'HOST': os.environ['RDS_HOSTNAME'],
             'PORT': os.environ['RDS_PORT'],
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            },
         }
     }
 
@@ -127,14 +132,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staic'),
     os.path.join(BASE_DIR, 'media'),
+    os.path.join(BASE_DIR,'static'),
 ]
 
 #authentication setup
@@ -142,7 +147,7 @@ LOGIN_REDIRECT_URL ='/product/list'
 
 #setup email backend
 EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
-SENDGRID_API_KEY = os.environ["SENDGRID_API_KEY"]
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 #cart configuration
@@ -150,9 +155,9 @@ CART_SESSION_ID = 'cart'
 
 #configure celery parameters
 
-CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']#redis://:password@hostname:port/db_number
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL')#redis://:password@hostname:port/db_number
 
-CELERY_RESULT_BACKEND = os.environ['CELERY_RESULT_BACKEND']
+CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND')
 
 #安全性考量，確保第三方無法控制broker memory的狀態
 CELERY_ACCPET_CONTENT = ['json']
@@ -161,4 +166,14 @@ CELERY_RESULT_ACCEPT_CONTENT = ['json']
 
 CELERY_TIMEZONE= ['Asia/Taipei']
 
-#CELERY_TASK_SERIALIZER = ['json']
+#定義cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('CELERY_BROKER_URL'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "my_shop"
+    }
+}

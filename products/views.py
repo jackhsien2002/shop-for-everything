@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from django.views.generic.list import ListView
 import re
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
+from .decorators import member_is_owner_of_product
 def product_list(request):
 
     products = Product.objects.all()
@@ -42,10 +44,12 @@ def product_list(request):
         }
     )
 
+
 def product_detail(request, slug):
     product = Product.objects.get(slug = slug)
     return render(request, 'products/detail.html', {'product' : product})
 
+@login_required
 def product_create(request):
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
@@ -56,6 +60,8 @@ def product_create(request):
         form = ProductForm(initial={'author':request.user})
     return render(request, 'products/create.html', {'form' : form})
 
+@member_is_owner_of_product
+@login_required
 @require_http_methods(['POST'])
 def product_delete(request):
     product_id = int(request.POST['product_id'])
@@ -64,6 +70,7 @@ def product_delete(request):
     return redirect(reverse('product_delete_success'))
 
 
+@login_required
 def product_delete_success(request):
     return render(request, 'products/product_delete_success.html')
 

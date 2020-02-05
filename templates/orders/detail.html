@@ -1,9 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-{% for product in products %}
-    {{ product.product.name }}
-    {{ product.product.price }}
-    {{ product.quantity }}
-    {{ product.expense }}
-{% endfor %}
+
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">商品名稱</th>
+        <th scope="col">單價</th>
+        <th scope="col">數量</th>
+        <th scope="col">金額</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.product.name }}</td>
+                <td>{{ product.product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>{{ product.expense }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td>總金額</td>
+            <td>{{ order.get_total_expense }}</td>
+        </tr>
+    </tbody>
+  </table>
 {% endblock %}
