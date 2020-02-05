@@ -3,12 +3,20 @@
 
 <h1>你的訂單紀錄</h1>
 {% for order in orders %}
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-        <h5 class="card-title">訂單編號: {{ order.id }}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">訂單日期: {{ order.pub_date }}</h6>
-        <a href="{{ order.get_absolute_url }}" class="card-link">查看</a>
-        </div>
+    {% if order.is_new_row %}
+    <div class="row" style="margin:10px">
+    {% endif %}
+    <div class="col-sm-3">
+      <div class="card" style="width: 18rem;">
+          <div class="card-body">
+          <h5 class="card-title">訂單編號: {{ order.id }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">訂單日期: {{ order.pub_date }}</h6>
+          <a href="{{ order.get_absolute_url }}" class="card-link">查看</a>
+          </div>
+      </div>
     </div>
-  {% endfor %}
+    {% if order.is_end_row %}
+      </div>
+    {% endif %}
+{% endfor %}
 {% endblock %}

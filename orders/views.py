@@ -39,7 +39,12 @@ def checkout(request):
 @login_required
 def order_list(request):
     user = request.user
-    orders = user.orders.all()
+    orders = user.orders.all().values()
+    for i in range(len(orders)):
+        orders[i]['is_new_row'] = True if i%4 == 0 else False
+        orders[i]['is_end_row'] = True if i%4 == 3 else False
+        if i == (len(orders) -1):
+            orders[i]['is_end_row'] = True
     return render(request,'orders/list.html', {'orders':orders})
 
 @login_required

@@ -3,7 +3,8 @@ from .cart import Cart
 from products.models import Product
 from .decorators import stock_should_enough
 from django.core.exceptions import PermissionDenied
-
+from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
 @stock_should_enough
 def cart_update(request):
     if request.method == "POST":
@@ -21,3 +22,13 @@ def cart_update(request):
 def cart_detail(request):
     cart = Cart(request)
     return render(request, 'cart/detail.html', {'cart' : cart})
+
+def cart_delete(request):
+    print('message get')
+    is_processed = request.POST['is_processed']
+    product_id = request.POST['product_id']
+    data = {"is_processed" : True, "product_id": product_id}
+    cart = Cart(request)
+    product = Product.objects.get(pk=product_id)
+    cart.remove(product)
+    return JsonResponse(data)

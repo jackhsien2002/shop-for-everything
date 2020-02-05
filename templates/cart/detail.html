@@ -12,29 +12,86 @@
             <th scope="col">單價</th>
             <th scope="col">數量</th>
             <th scope="col">金額</th>
+            <th scope="col">刪除</th>
           </tr>
         </thead>
             <tbody>
                 {% for item in cart %}
-                    <tr>
+                    <tr id="row{{ item.product.id }}">
                         <td>{{ item.product.name }}</td>
                         <td>{{ item.product.price }}</td>
                         <td>{{ item.quantity }}</td>
                         <td>{{ item.total_price }}</td>
+                        <td><button class="itemButton" id = "{{ item.product.id }}">丟垃圾桶</button></td>
                     </tr>
                 {% endfor %}
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>總金額： {{ cart.get_total_price }}</td>
-                </tr>
             </tbody>
 
     </table>
-    <form action="{% url 'checkout' %}" method="post">
+    <form action="{% url 'checkout' %}" method="post" id="checkout">
         {% csrf_token %}
         <button type="submit">送出結單</button>
     </form>
 {% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        var items = document.querySelectorAll(".itemButton");
+        var count = items.length;
+        items.forEach(item => {
+            item.onclick = function() {
+
+                var product_id = item.getAttribute('id');
+
+                const data = new FormData();
+                data.append('is_processed', false);
+                data.append('product_id', product_id);
+                var csrftoken = getCookie('csrftoken');
+                data.append('csrfmiddlewaretoken', csrftoken);
+
+                const request = new XMLHttpRequest();
+                request.open("POST", "/cart/delete")
+                request.onload = function() {
+                    const data = JSON.parse(request.responseText);
+                    if(data.is_processed == true) {
+                        var is_removed = removeDeleteItem(data.product_id, data.is_processed);
+                        if (is_removed == false) {
+                            alert("刪除失敗，請重試");
+                        }
+                    }
+
+                };
+                count = count -1;
+                request.send(data);
+                var checkout_form = document.getElementById('checkout')
+                if (count == 0) {
+                    checkout_form.remove();
+                }          
+            }
+        });
+
+    });
+    function removeDeleteItem(product_id, is_processed){
+        if (is_processed == false) {
+            return false
+        }
+        var element = document.getElementById("row" + product_id);
+        element.remove()
+        return true;
+    }
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
 {% endblock %}
