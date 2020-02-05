@@ -25,7 +25,7 @@ SECRET_KEY = 't)%0b&=8v4g9kdjk(kmfj6vt9u2dc_8=0!9-x(yaz$t+h8n-ia'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['MyShop.us-west-2.elasticbeanstalk.com','localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = ['MyShop.us-west-2.elasticbeanstalk.com','localhost', '127.0.0.1', '[::1]', '44.231.231.74']
 
 
 # Application definition
@@ -139,7 +139,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'media'),
-    os.path.join(BASE_DIR,'static'),
 ]
 
 #authentication setup
@@ -167,6 +166,7 @@ CELERY_RESULT_ACCEPT_CONTENT = ['json']
 CELERY_TIMEZONE= ['Asia/Taipei']
 
 #定義cache
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
